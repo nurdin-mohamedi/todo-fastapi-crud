@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "fastapi[standard]>=0.116.1",
+    "sqlalchemy>=2.0.42",
 ]
 
 [tool.pytest.ini_options]
