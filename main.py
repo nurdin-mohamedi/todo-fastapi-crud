@@ -4,5 +4,5 @@ app = FastAPI()
 
 
 @app.get("/")
-def get_home():
+def get_home() -> dict:
     return {"message": "Hello, World!"}
