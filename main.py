@@ -1,6 +1,6 @@
-from typing import Any
+from typing import Annotated, Any
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Path
 from sqlalchemy.orm import Session
 
 from models import TodoBase
@@ -15,7 +15,7 @@ def get_home() -> dict:
     return {"message": "Hello, World!"}
 
 
-@app.get("/todos", response_model=list[TodoBase])
+@app.get("/todos", response_model=list[TodoBase] | dict[str, str])
 def get_todos(
     db: Session = Depends(get_db),
 ) -> Any:
@@ -25,3 +25,13 @@ def get_todos(
         print(todos[0].description)
         return todos
     return {"message": "Todos not found"}
+
+
+@app.get("/todos/{todo_id}", response_model=TodoBase | dict[str, str])
+def get_todo(
+    todo_id: Annotated[int, Path(ge=1)], db: Session = Depends(get_db)
+):
+    todo = db.query(Todo).filter(Todo.id == todo_id).first()
+    if todo:
+        return todo
+    return {"message": "Todo not found"}
