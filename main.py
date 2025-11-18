@@ -1,6 +1,6 @@
 from typing import Annotated, Any
 
-from fastapi import Depends, FastAPI, Path
+from fastapi import Depends, FastAPI, Path, Query
 from sqlalchemy.orm import Session
 
 from models import TodoBase
@@ -17,9 +17,13 @@ def get_home() -> dict:
 
 @app.get("/todos", response_model=list[TodoBase] | dict[str, str])
 def get_todos(
+    limit: Annotated[int | None, Query(ge=0, le=10)] = 10,
+    offset: Annotated[int | None, Query(ge=0, le=10)] = 0,
     db: Session = Depends(get_db),
 ) -> Any:
-    todos: list[Todo] = db.query(Todo).all()
+    todos: list[Todo] = (
+        db.query(Todo).offset(offset).limit(limit).all()
+    )
     if todos:
         print(todos[0].title)
         print(todos[0].description)
