@@ -36,6 +36,52 @@ def test_get_all_todos():
     ]
 
 
+def test_get_limited_todos():
+    response = client.get("/todos?limit=2")
+    assert response.status_code == 200
+    assert response.json() == [
+        {
+            "title": "Create a CRUD application",
+            "description": "Create a FastAPI CRUD application for managing todos",
+            "is_complete": False,
+        },
+        {
+            "title": "Read a book",
+            "description": "Read a book of title 'Do it Today'",
+            "is_complete": False,
+        },
+    ]
+
+
+def test_get_offseted_todos():
+    response = client.get("/todos?offset=1")
+    assert response.status_code == 200
+    assert response.json() == [
+        {
+            "title": "Read a book",
+            "description": "Read a book of title 'Do it Today'",
+            "is_complete": False,
+        },
+        {
+            "title": "Update github profile",
+            "description": "Add newly acquire skills",
+            "is_complete": False,
+        },
+    ]
+
+
+def test_get_offseted_and_limited_todos():
+    response = client.get("/todos?offset=1&limit=1")
+    assert response.status_code == 200
+    assert response.json() == [
+        {
+            "title": "Read a book",
+            "description": "Read a book of title 'Do it Today'",
+            "is_complete": False,
+        },
+    ]
+
+
 def test_get_todos_non_found():
     # TODO: Delete all todos
     response = client.get("/todos")
