@@ -22,7 +22,17 @@ def override_get_db():
             "title": "Create a CRUD application",
             "description": "Create a FastAPI CRUD application for managing todos",
             "is_complete": False,
-        }
+        },
+        {
+            "title": "Read a book",
+            "description": "Read a book of title 'Do it Today'",
+            "is_complete": False,
+        },
+        {
+            "title": "Update github profile",
+            "description": "Add newly acquire skills",
+            "is_complete": False,
+        },
     ]
     for todo in todos:
         db.add(Todo(**todo))
